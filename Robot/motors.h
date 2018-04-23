@@ -7,7 +7,8 @@
 #define STATE_RIGHT    2
 #define STATE_BACKWARD 3
 #define STATE_STOP     4
-
+#define ADJUST_LEFT    5
+#define ADJUST_RIGHT   6
 class Motors {
 public:
   Motors();
@@ -19,7 +20,9 @@ public:
   void left();
   void right();
   void stop();
-
+  void adjust_left();
+  void adjust_right();
+  
   void right90();
   void left90();
 
@@ -113,7 +116,7 @@ void Motors::forward() {
   analogWrite(speedpinB,spead);
   digitalWrite(pinI4,LOW);//turn DC Motor B move anticlockwise
   digitalWrite(pinI3,HIGH);
-  digitalWrite(pinI2,LOW);//turn DC Motor A move clockwise
+  digitalWrite(pinI2,LOW);//turn DC Motor A move anticlockwise
   digitalWrite(pinI1,HIGH);
 }
 
@@ -121,7 +124,37 @@ void Motors::stop() {
   state = STATE_STOP;
   digitalWrite(speedpinA,LOW);// Unenble the pin, to stop the motor. this should be done to avid damaging the motor. 
   digitalWrite(speedpinB,LOW);
-  delay(1000);
+  delay(100);
+}
+
+void Motors::adjust_left()
+{
+     if (state != ADJUST_LEFT) {
+      stop();
+      delay(100);
+      state = ADJUST_LEFT;
+   }
+   analogWrite(speedpinA,spead);//input a simulation value to set the speed
+   analogWrite(speedpinB,spead + 4);
+   digitalWrite(pinI4,LOW);//turn DC Motor B move anticlockwise
+   digitalWrite(pinI3,HIGH);
+   digitalWrite(pinI2,LOW);//turn DC Motor A move anticlockwise
+   digitalWrite(pinI1,HIGH);
+}
+
+void Motors::adjust_right()
+{
+     if (state != ADJUST_RIGHT) {
+      stop();
+      delay(100);
+      state = ADJUST_RIGHT;
+   }
+   analogWrite(speedpinA,spead + 7);//input a simulation value to set the speed
+   analogWrite(speedpinB,spead);
+   digitalWrite(pinI4,LOW);//turn DC Motor B move anticlockwise
+   digitalWrite(pinI3,HIGH);
+   digitalWrite(pinI2,LOW);//turn DC Motor A move anticlockwise
+   digitalWrite(pinI1,HIGH);
 }
 
 void Motors::right90() {
