@@ -9,6 +9,8 @@
 #define STATE_STOP     4
 #define ADJUST_LEFT    5
 #define ADJUST_RIGHT   6
+#define BASE_SPEAD     127
+
 class Motors {
 public:
   Motors();
@@ -36,6 +38,9 @@ private:
   int pinI4;//define I4 interface 
   int speedpinB;//enable motor B
   int spead;//define the spead of motor
+
+  int speadA;
+  int speadB;
   
 
   byte state;
@@ -52,7 +57,9 @@ void Motors::setup() {
   pinI3 = 12; 
   pinI4 = 13;
   speedpinB = 10;
-  spead = 80;
+  //spead = 127;
+  speadA = BASE_SPEAD;
+  speadB = speadA + 7;
 
   state = STATE_STOP;
 
@@ -70,8 +77,8 @@ void Motors::right() {
       delay(100);
       state = STATE_RIGHT;
    }
-   analogWrite(speedpinA,spead);//input a simulation value to set the speed
-   analogWrite(speedpinB,spead);
+   analogWrite(speedpinA,speadA);//input a simulation value to set the speed
+   analogWrite(speedpinB,speadB);
    digitalWrite(pinI4,HIGH);//turn DC Motor B move clockwise
    digitalWrite(pinI3,LOW);
    digitalWrite(pinI2,LOW);//turn DC Motor A move anticlockwise
@@ -84,8 +91,8 @@ void Motors::left() {
      delay(100);
      state = STATE_LEFT;
    }
-   analogWrite(speedpinA,spead);//input a simulation value to set the speed
-   analogWrite(speedpinB,spead);
+   analogWrite(speedpinA,speadA);//input a simulation value to set the speed
+   analogWrite(speedpinB,speadB);
    digitalWrite(pinI4,LOW);//turn DC Motor B move anticlockwise
    digitalWrite(pinI3,HIGH);
    digitalWrite(pinI2,HIGH);//turn DC Motor A move clockwise
@@ -98,8 +105,8 @@ void Motors::backward() {
      delay(100);
      state = STATE_BACKWARD;
   }
-  analogWrite(speedpinA,spead);//input a simulation value to set the speed
-  analogWrite(speedpinB,spead);
+  analogWrite(speedpinA,speadA);//input a simulation value to set the speed
+  analogWrite(speedpinB,speadB);
   digitalWrite(pinI4,HIGH);//turn DC Motor B move clockwise
   digitalWrite(pinI3,LOW);
   digitalWrite(pinI2,HIGH);//turn DC Motor A move clockwise
@@ -112,8 +119,8 @@ void Motors::forward() {
     delay(100);
     state = STATE_FORWARD;
   }
-  analogWrite(speedpinA,spead);//input a simulation value to set the speed
-  analogWrite(speedpinB,spead);
+  analogWrite(speedpinA,speadA);//input a simulation value to set the speed
+  analogWrite(speedpinB,speadB);
   digitalWrite(pinI4,LOW);//turn DC Motor B move anticlockwise
   digitalWrite(pinI3,HIGH);
   digitalWrite(pinI2,LOW);//turn DC Motor A move anticlockwise
@@ -134,8 +141,8 @@ void Motors::adjust_left()
       delay(100);
       state = ADJUST_LEFT;
    }
-   analogWrite(speedpinA,spead);//input a simulation value to set the speed
-   analogWrite(speedpinB,spead + 4);
+   analogWrite(speedpinA,speadA - 15);//input a simulation value to set the speed
+   analogWrite(speedpinB,speadB);
    digitalWrite(pinI4,LOW);//turn DC Motor B move anticlockwise
    digitalWrite(pinI3,HIGH);
    digitalWrite(pinI2,LOW);//turn DC Motor A move anticlockwise
@@ -149,8 +156,8 @@ void Motors::adjust_right()
       delay(100);
       state = ADJUST_RIGHT;
    }
-   analogWrite(speedpinA,spead + 7);//input a simulation value to set the speed
-   analogWrite(speedpinB,spead);
+   analogWrite(speedpinA,speadA);//input a simulation value to set the speed
+   analogWrite(speedpinB,speadB - 15);
    digitalWrite(pinI4,LOW);//turn DC Motor B move anticlockwise
    digitalWrite(pinI3,HIGH);
    digitalWrite(pinI2,LOW);//turn DC Motor A move anticlockwise

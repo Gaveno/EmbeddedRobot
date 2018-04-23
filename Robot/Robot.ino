@@ -36,19 +36,25 @@ void loop()
   //if ratio is within 10% we are all good
   //if ratio is 0.5: Right is far away from the wall correct right
   //if ratio is 1.5: Left is far away from wall correct left
+  const float lowerlimit = 0.75;
+  const float upperlimit = 1.25;
   
-  if (ratio >= 0.85 && ratio <= 1.15)
+  if (ratio >= lowerlimit && ratio <= upperlimit)
   {
     motors.forward();
   }
-  else if (ratio >= 1.5 && (lasers.getLeft() != OUT_OF_RANGE && lasers.getRight() != OUT_OF_RANGE))
+  else if (ratio > upperlimit && (lasers.getLeft() != OUT_OF_RANGE && lasers.getRight() != OUT_OF_RANGE))
   {
     motors.adjust_left();
   }
-  else if (ratio <= 0.5 && (lasers.getLeft() != OUT_OF_RANGE && lasers.getRight() != OUT_OF_RANGE))
+  else if (ratio < lowerlimit && (lasers.getLeft() != OUT_OF_RANGE && lasers.getRight() != OUT_OF_RANGE))
   {
     motors.adjust_right();
   }
+
+  //motors.adjust_left();
+  //motors.adjust_right();
+  //motors.forward();
 
 //  if (lasers.getFront() == OUT_OF_RANGE) {
 //    motors.forward();
