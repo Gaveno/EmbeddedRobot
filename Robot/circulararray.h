@@ -1,7 +1,7 @@
 /// Circular Array
 /// Easy running averages
 
-#define TOTAL_VALUES  10
+#define TOTAL_VALUES  5
 
 template <typename T>
 class CircularArray

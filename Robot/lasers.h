@@ -16,7 +16,7 @@
 #define addressFront 0x22
 #define addressRight 0x24
 
-/* These Arduino pins must be wired to the IO0 pin of VL6180x */
+/* These Arduino pins must be wired to the Shutdown pin of VL6180x */
 int enablePinLeft = 3;
 int enablePinFront = 4;
 int enablePinRight = 5;
