@@ -2,6 +2,9 @@
  * Control the lasers on the car.
  */
 
+ #ifndef __LASERS_H__
+#define __LASERS_H__
+
 #include <Wire.h>
 #include <VL6180X.h>
 
@@ -37,6 +40,10 @@ public:
   byte getLeft();
   byte getFront();
   byte getRight();
+
+  byte getDirectLeft();
+  byte getDirectRight();
+  byte getDirectFront();
 
 private:
   CircularArray<byte> laserLeft;
@@ -139,4 +146,24 @@ byte Lasers::getFront() {
 byte Lasers::getRight() {
   return laserRight.getAverage();  
 }
+
+byte Lasers::getDirectLeft() {
+  byte val = sensorLeft.readRangeContinuousMillimeters();
+  if (sensorLeft.timeoutOccurred()) { Serial.print("Sensor Left TIMEOUT"); }
+  return val;
+}
+
+byte Lasers::getDirectRight() {
+  byte val = sensorRight.readRangeContinuousMillimeters();
+  if (sensorRight.timeoutOccurred()) { Serial.print("Sensor Right TIMEOUT"); }
+  return val;
+}
+
+byte Lasers::getDirectFront() {
+  byte val = sensorFront.readRangeContinuousMillimeters();
+  if (sensorFront.timeoutOccurred()) { Serial.print("Sensor Front TIMEOUT"); }
+  return val;
+}
+
+#endif
 

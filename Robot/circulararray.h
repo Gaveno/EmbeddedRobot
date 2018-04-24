@@ -1,6 +1,9 @@
 /// Circular Array
 /// Easy running averages
 
+#ifndef __CIRCULAR_ARRAY_H__
+#define __CIRCULAR_ARRAY_H__
+
 #define TOTAL_VALUES  5
 
 template <typename T>
@@ -86,3 +89,4 @@ void CircularArray<T>::dumpArray()
   }
 }
 
+#endif
