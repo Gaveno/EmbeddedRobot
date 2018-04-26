@@ -1,8 +1,10 @@
+#include "lights.h"
 #include "lasers.h"
 #include "motors.h"
 
 Lasers lasers;
 Motors motors;
+Lights lights;
 
 void setup()
 {
@@ -30,6 +32,9 @@ void loop()
   Serial.print(lasers.getRight());
   Serial.println();
 
+  lights.set(LIGHT_LEFT, (lasers.getLeft() == OUT_OF_RANGE));
+  lights.set(LIGHT_FRONT, (lasers.getFront() == OUT_OF_RANGE));
+  lights.set(LIGHT_RIGHT, (lasers.getRight() == OUT_OF_RANGE));
 
   if (lasers.getDirectFront() >= 120) {
     motors.forward_adjusting();

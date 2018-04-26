@@ -16,7 +16,7 @@ extern Lasers lasers;
 #define STATE_STOP     4
 #define ADJUST_LEFT    5
 #define ADJUST_RIGHT   6
-#define BASE_SPEAD     100
+#define BASE_SPEAD     200
 #define TURN_ADJUST    -20
 #define BACK_ADJUST    20
 #define TURN_SLIGHTLY  10
