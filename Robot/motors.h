@@ -16,7 +16,7 @@ extern Lasers lasers;
 #define STATE_STOP     4
 #define ADJUST_LEFT    5
 #define ADJUST_RIGHT   6
-#define BASE_SPEAD     200
+#define BASE_SPEAD     228
 #define TURN_ADJUST    -20
 #define BACK_ADJUST    20
 #define TURN_SLIGHTLY  10
@@ -33,8 +33,8 @@ public:
   void left();
   void right();
   void stop();
-  void adjust_left();
-  void adjust_right();
+  void adjust_left(int difference);
+  void adjust_right(int difference);
   
   void right90();
   void left90();
@@ -156,11 +156,11 @@ void Motors::forward_adjusting() {
   }
   else if (ratio > upperlimit && (lasers.getLeft() != OUT_OF_RANGE && lasers.getRight() != OUT_OF_RANGE))
   {
-    adjust_left();
+    adjust_left(lasers.getLeft() - lasers.getRight());
   }
   else if (ratio < lowerlimit && (lasers.getLeft() != OUT_OF_RANGE && lasers.getRight() != OUT_OF_RANGE))
   {
-    adjust_right();
+    adjust_right(lasers.getRight() - lasers.getLeft());
   }
 }
 
@@ -171,14 +171,15 @@ void Motors::stop() {
   delay(100);
 }
 
-void Motors::adjust_left()
+void Motors::adjust_left(int difference)
 {
    if (state != ADJUST_LEFT) {
       stop();
       delay(100);
       state = ADJUST_LEFT;
    }
-   analogWrite(speedpinA,speadA - TURN_SLIGHTLY);//input a simulation value to set the speed
+   //analogWrite(speedpinA,speadA - TURN_SLIGHTLY);//input a simulation value to set the speed
+   analogWrite(speedpinA,speadA - difference);//input a simulation value to set the speed
    analogWrite(speedpinB,speadB);
    digitalWrite(pinI4,LOW);//turn DC Motor B move anticlockwise
    digitalWrite(pinI3,HIGH);
@@ -186,7 +187,7 @@ void Motors::adjust_left()
    digitalWrite(pinI1,HIGH);
 }
 
-void Motors::adjust_right()
+void Motors::adjust_right(int difference)
 {
    if (state != ADJUST_RIGHT) {
       stop();
@@ -194,7 +195,8 @@ void Motors::adjust_right()
       state = ADJUST_RIGHT;
    }
    analogWrite(speedpinA,speadA);//input a simulation value to set the speed
-   analogWrite(speedpinB,speadB - TURN_SLIGHTLY);
+   //analogWrite(speedpinB,speadB - TURN_SLIGHTLY);
+   analogWrite(speedpinB,speadB - difference);
    digitalWrite(pinI4,LOW);//turn DC Motor B move anticlockwise
    digitalWrite(pinI3,HIGH);
    digitalWrite(pinI2,LOW);//turn DC Motor A move anticlockwise

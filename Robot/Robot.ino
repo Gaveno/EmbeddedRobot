@@ -36,7 +36,7 @@ void loop()
   lights.set(LIGHT_FRONT, (lasers.getFront() == OUT_OF_RANGE));
   lights.set(LIGHT_RIGHT, (lasers.getRight() == OUT_OF_RANGE));
 
-  if (lasers.getDirectFront() >= 120) {
+  if (lasers.getDirectFront() >= 200) {
     motors.forward_adjusting();
   }
   else if (lasers.getLeft() == OUT_OF_RANGE) {
