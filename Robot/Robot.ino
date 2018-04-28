@@ -1,11 +1,11 @@
-#include "lights.h"
+//#include "lights.h"
 #include "lasers.h"
 #include "motors.h"
 
 Lasers lasers;
 Motors motors;
-Lights lights;
-
+//Lights lights;
+bool turnedLeft = false;
 void setup()
 {
   Serial.begin(9600);
@@ -32,25 +32,68 @@ void loop()
   Serial.print(lasers.getRight());
   Serial.println();
 
-  lights.set(LIGHT_LEFT, (lasers.getLeft() == OUT_OF_RANGE));
-  lights.set(LIGHT_FRONT, (lasers.getFront() == OUT_OF_RANGE));
-  lights.set(LIGHT_RIGHT, (lasers.getRight() == OUT_OF_RANGE));
+  //  lights.set(LIGHT_LEFT, (lasers.getLeft() == OUT_OF_RANGE));
+  //  lights.set(LIGHT_FRONT, (lasers.getFront() == OUT_OF_RANGE));
+  //  lights.set(LIGHT_RIGHT, (lasers.getRight() == OUT_OF_RANGE));
 
   if (lasers.getDirectFront() >= 200) {
-    motors.forward_adjusting();
+    if (lasers.getDirectLeft() == OUT_OF_RANGE  && !turnedLeft)
+    {
+      if (!turnedLeft)
+      {
+        motors.forward();
+        delay(400);
+        motors.stop();
+        if (lasers.getDirectLeft() == OUT_OF_RANGE)
+        {
+          motors.stop();
+          delay(2000);
+          motors.left();
+          delay(320);
+          turnedLeft = true;
+          motors.forward();
+          delay(1000);
+          motors.stop();
+        }
+      }
+    }
+    else if (lasers.getDirectLeft() == OUT_OF_RANGE && lasers.getDirectRight() != OUT_OF_RANGE && lasers.getDirectRight() > 100)
+    {
+      motors.wallRight();
+    }
+    else if (lasers.getDirectRight() == OUT_OF_RANGE && lasers.getDirectLeft() != OUT_OF_RANGE && lasers.getDirectLeft() > 100 )
+    {
+      motors.wallLeft();
+    }
+    else
+    {
+      motors.forward_adjusting();
+    }
   }
-  else if (lasers.getLeft() == OUT_OF_RANGE) {
-    motors.left();
-  }
-  else {//if (lasers.getRight() == OUT_OF_RANGE) {
+  else if (lasers.getRight() == OUT_OF_RANGE) {
     motors.right();
+    delay(100);
+    Serial.println(motors.getState());
+    motors.stop();
   }
+  else if (lasers.getLeft() == OUT_OF_RANGE)
+  {
+    motors.left();
+    delay(100);
+    Serial.println(motors.getState());
+    motors.stop();
+  }
+  else
+  {
+    motors.right();
+    delay(100);
+    Serial.println(motors.getState());
+    motors.stop();
+  }
+
   /*else {
     motors.backward();
-  }*/
+    }*/
 
   Serial.print("Motor state: ");
-  Serial.println(motors.getState());
-
-  delay(100);
 }
