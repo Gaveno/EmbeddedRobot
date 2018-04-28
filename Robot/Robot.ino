@@ -41,10 +41,10 @@ void loop()
       motors.forward();
       delay(100);
       motors.stop();
-        motors.left();
-        delay(100);
-        motors.stop();
- 
+      motors.left();
+      delay(100);
+      motors.stop();
+
     }
     else if (lasers.getDirectLeft() == OUT_OF_RANGE && lasers.getDirectRight() != OUT_OF_RANGE && lasers.getDirectRight() > 100)
     {
