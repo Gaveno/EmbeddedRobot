@@ -36,12 +36,12 @@ void loop()
 
   if (lasers.getDirectFront() >= 200)
   {
-    if (lasers.getDirectRight() == OUT_OF_RANGE)
+    if (lasers.getDirectLeft() == OUT_OF_RANGE)
     {
       motors.forward();
       delay(100);
       motors.stop();
-        motors.right();
+        motors.left();
         delay(100);
         motors.stop();
  
@@ -59,22 +59,22 @@ void loop()
       motors.forward_adjusting();
     }
   }
-  else if (lasers.getDirectRight() == OUT_OF_RANGE) {
-    motors.right();
+  else if (lasers.getDirectLeft() == OUT_OF_RANGE) {
+    motors.left();
     delay(100);
     Serial.println(motors.getState());
     motors.stop();
   }
-  else if (lasers.getDirectLeft() == OUT_OF_RANGE)
+  else if (lasers.getDirectRight() == OUT_OF_RANGE)
   {
-    motors.left();
+    motors.right();
     delay(100);
     Serial.println(motors.getState());
     motors.stop();
   }
   else
   {
-    motors.right();
+    motors.left();
     delay(100);
     Serial.println(motors.getState());
     motors.stop();
