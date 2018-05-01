@@ -1,17 +1,22 @@
-#include "lights.h"
 #include "lasers.h"
 #include "motors.h"
 
 Lasers lasers;
 Motors motors;
-Lights lights;
-
+bool Left = false;
+//Lights lights;
 void setup()
 {
   Serial.begin(9600);
 
   lasers.setup();
   motors.setup();
+  lasers.update();
+
+  if(lasers.getDirectLeft() < 255)
+  {
+    Left = true;
+  }
 }
 
 void loop()
@@ -32,25 +37,110 @@ void loop()
   Serial.print(lasers.getRight());
   Serial.println();
 
-  lights.set(LIGHT_LEFT, (lasers.getLeft() == OUT_OF_RANGE));
-  lights.set(LIGHT_FRONT, (lasers.getFront() == OUT_OF_RANGE));
-  lights.set(LIGHT_RIGHT, (lasers.getRight() == OUT_OF_RANGE));
+  //  lights.set(LIGHT_LEFT, (lasers.getLeft() == OUT_OF_RANGE));
+  //  lights.set(LIGHT_FRONT, (lasers.getFront() == OUT_OF_RANGE));
+  //  lights.set(LIGHT_RIGHT, (lasers.getRight() == OUT_OF_RANGE));
+if(Left)
+{
+  if (lasers.getDirectFront() >= 200)
+  {
+    if (lasers.getDirectLeft() == OUT_OF_RANGE)
+    {
+      motors.forward();
+      delay(100);
+      motors.stop();
+      motors.left();
+      delay(100);
+      motors.stop();
 
-  if (lasers.getDirectFront() >= 200) {
-    motors.forward_adjusting();
+    }
+    else if (lasers.getDirectLeft() == OUT_OF_RANGE && lasers.getDirectRight() != OUT_OF_RANGE && lasers.getDirectRight() > 100)
+    {
+      motors.wallRight();
+    }
+    else if (lasers.getDirectRight() == OUT_OF_RANGE && lasers.getDirectLeft() != OUT_OF_RANGE && lasers.getDirectLeft() > 100 )
+    {
+      motors.wallLeft();
+    }
+    else
+    {
+      motors.forward_adjusting();
+    }
   }
-  else if (lasers.getLeft() == OUT_OF_RANGE) {
+  else if (lasers.getDirectLeft() == OUT_OF_RANGE) {
     motors.left();
+    delay(100);
+    Serial.println(motors.getState());
+    motors.stop();
   }
-  else {//if (lasers.getRight() == OUT_OF_RANGE) {
+  else if (lasers.getDirectRight() == OUT_OF_RANGE)
+  {
     motors.right();
+    delay(100);
+    Serial.println(motors.getState());
+    motors.stop();
   }
-  /*else {
-    motors.backward();
-  }*/
+  else
+  {
+    motors.left();
+    delay(100);
+    Serial.println(motors.getState());
+    motors.stop();
+  }
+}
+else if (!Left)
+{
+   if (lasers.getDirectFront() >= 200)
+  {
+    if (lasers.getDirectRight() == OUT_OF_RANGE)
+    {
+      motors.forward();
+      delay(100);
+      motors.stop();
+        motors.right();
+        delay(100);
+        motors.stop();
+ 
+    }
+    else if (lasers.getDirectLeft() == OUT_OF_RANGE && lasers.getDirectRight() != OUT_OF_RANGE && lasers.getDirectRight() > 100)
+    {
+      motors.wallRight();
+    }
+    else if (lasers.getDirectRight() == OUT_OF_RANGE && lasers.getDirectLeft() != OUT_OF_RANGE && lasers.getDirectLeft() > 100 )
+    {
+      motors.wallLeft();
+    }
+    else
+    {
+      motors.forward_adjusting();
+    }
+  }
+  else if (lasers.getDirectRight() == OUT_OF_RANGE) {
+    motors.right();
+    delay(100);
+    Serial.println(motors.getState());
+    motors.stop();
+  }
+  else if (lasers.getDirectLeft() == OUT_OF_RANGE)
+  {
+    motors.left();
+    delay(100);
+    Serial.println(motors.getState());
+    motors.stop();
+  }
+  else
+  {
+    motors.right();
+    delay(100);
+    Serial.println(motors.getState());
+    motors.stop();
+  }
+}
+else
+{
+  delay(10000);
+}
+
 
   Serial.print("Motor state: ");
-  Serial.println(motors.getState());
-
-  delay(100);
 }
